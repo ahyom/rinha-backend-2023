@@ -12,19 +12,19 @@ import java.util.UUID
 @Entity(name = "tb_pessoa")
 class Pessoa(
     @Id
-    private var id: UUID,
+    var id: UUID,
 
     @Column(name = "apelido", nullable = false, unique = true)
-    private var apelido: String,
+    var apelido: String,
 
     @Column(name = "nome", nullable = false, unique = true)
-    private var nome: String,
+    var nome: String,
 
     @Column(name = "nascimento", nullable = false)
-    private var nascimento: LocalDate,
+    var nascimento: LocalDate,
 
     @ElementCollection
     @CollectionTable(name = "tb_stack", joinColumns = [JoinColumn(name = "pessoa_id")])
     @Column(nullable = true)
-    private var stack: List<String>?,
+    var stack: List<String>?,
 )
