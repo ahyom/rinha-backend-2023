@@ -35,7 +35,7 @@ class PessoaController {
         TODO()
     }
 
-    @GetMapping
+    @GetMapping("/contagem-pessoas")
     fun getTotalPessoas(): ResponseEntity<Int> {
         TODO()
     }
