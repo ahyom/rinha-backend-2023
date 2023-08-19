@@ -2,6 +2,7 @@ package com.soave.rinhabackend.controller.advice
 
 import com.soave.rinhabackend.controller.PessoaController
 import com.soave.rinhabackend.domain.request.ErrorRequest
+import com.soave.rinhabackend.exception.NotFoundException
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,6 +17,19 @@ private val logger = KotlinLogging.logger {}
     ],
 )
 class ControllerAdvice {
+
+    @ExceptionHandler(NotFoundException::class)
+    fun handleNotFoundException(exception: NotFoundException): ResponseEntity<ErrorRequest> {
+        logger.error("Handling NotFoundException: ${exception.message}", exception)
+        return ResponseEntity(
+            ErrorRequest(
+                HttpStatus.NOT_FOUND.reasonPhrase,
+                HttpStatus.NOT_FOUND.value(),
+                exception.message,
+            ),
+            HttpStatus.NOT_FOUND,
+        )
+    }
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ResponseEntity<ErrorRequest> {
