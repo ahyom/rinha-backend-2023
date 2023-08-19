@@ -32,7 +32,20 @@ class ControllerAdvice {
         )
     }
 
-    @ExceptionHandler(IllegalArgumentException::class, EntityAlreadyExistsException::class)
+    @ExceptionHandler(EntityAlreadyExistsException::class)
+    fun handleEntityAlreadyExistsException(exception: EntityAlreadyExistsException): ResponseEntity<ErrorRequest> {
+        logger.error("Handling Exception: ${exception.message}", exception)
+        return ResponseEntity(
+            ErrorRequest(
+                HttpStatus.UNPROCESSABLE_ENTITY.reasonPhrase,
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                exception.message,
+            ),
+            HttpStatus.UNPROCESSABLE_ENTITY,
+        )
+    }
+
+    @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ResponseEntity<ErrorRequest> {
         logger.error("Handling Exception: ${exception.message}", exception)
         return ResponseEntity(
