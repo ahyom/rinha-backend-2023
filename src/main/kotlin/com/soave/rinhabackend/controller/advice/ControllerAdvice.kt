@@ -2,6 +2,7 @@ package com.soave.rinhabackend.controller.advice
 
 import com.soave.rinhabackend.controller.PessoaController
 import com.soave.rinhabackend.domain.request.ErrorRequest
+import com.soave.rinhabackend.exception.EntityAlreadyExistsException
 import com.soave.rinhabackend.exception.NotFoundException
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -31,9 +32,9 @@ class ControllerAdvice {
         )
     }
 
-    @ExceptionHandler(IllegalArgumentException::class)
+    @ExceptionHandler(IllegalArgumentException::class, EntityAlreadyExistsException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ResponseEntity<ErrorRequest> {
-        logger.error("Handling IllegalArgumentException: ${exception.message}", exception)
+        logger.error("Handling Exception: ${exception.message}", exception)
         return ResponseEntity(
             ErrorRequest(
                 HttpStatus.UNPROCESSABLE_ENTITY.reasonPhrase,
