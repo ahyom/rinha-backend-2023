@@ -1,1 +1,14 @@
-
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5455/rinhabackend
+    username: artsoave
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
