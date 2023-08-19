@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db-psql:5432/rinhabackend
-    username: artsoave
+    url: jdbc:postgresql://db:5432/rinhabackend
+    username: rinha
     password: 123456
     driver-class-name: org.postgresql.Driver
   jackson:
