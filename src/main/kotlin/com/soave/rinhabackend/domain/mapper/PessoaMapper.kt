@@ -5,6 +5,7 @@ import com.soave.rinhabackend.domain.request.PessoaRequest
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Objects.isNull
 import java.util.UUID
 
 @Component
@@ -16,7 +17,7 @@ class PessoaMapper : Mapper<PessoaRequest, Pessoa> {
             }
         }
 
-        if (domain.id != null) {
+        if (isNull(domain.id)) {
             domain.id = UUID.randomUUID()
         }
         return Pessoa(
