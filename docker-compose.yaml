@@ -1,23 +1,35 @@
 version: '3'
 services:
-  app:
-    build:
-      context: ./app
-    ports:
-      - "8080:8080"
+  api1:
+    image: arthursoave/ahyom:7368c330ee0f
+    hostname: api1
+    expose:
+      - "80"
     depends_on:
-      - db
-  db:
+      - db-psql
+#  api2:
+#    image: artsoave/rinhabackend:latest
+#    expose:
+#      - "80"
+#    depends_on:
+#      - db
+  db-psql:
     image: postgres:latest
     environment:
       POSTGRES_DB: rinhabackend
       POSTGRES_USER: artsoave
       POSTGRES_PASSWORD: 123456
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - app
+
+#  nginx: # Load Balancer
+#    image: nginx:latest
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+##    depends_on:
+##      - api1
+#    ports:
+#      - "9999:9999"
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.25'
+#          memory: '0.5GB'
