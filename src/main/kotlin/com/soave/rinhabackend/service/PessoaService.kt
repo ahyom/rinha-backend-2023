@@ -26,4 +26,9 @@ class PessoaService @Autowired constructor(
             .findById(UUID.fromString(pessoaId))
             .orElseThrow { NotFoundException("Pessoa with ID [$pessoaId] not found") }
     }
+
+    fun getPessoaBySearchTerm(searchTerm: String): List<Pessoa> {
+        logger.debug { "Getting pessoa with searchTerm [$searchTerm]" }
+        return pessoaRepository.findAllBySearchTerm(searchTerm)
+    }
 }
