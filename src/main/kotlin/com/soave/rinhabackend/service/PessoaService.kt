@@ -43,4 +43,9 @@ class PessoaService @Autowired constructor(
         logger.debug { "Getting pessoa with searchTerm [$searchTerm]" }
         return pessoaRepository.findAllBySearchTerm(searchTerm)
     }
+
+    fun getTotalPessoas(): Int {
+        logger.debug { "Getting total pessoas" }
+        return pessoaRepository.count().toInt()
+    }
 }

@@ -45,7 +45,7 @@ class PessoaController @Autowired constructor(
 
     @GetMapping
     fun getPessoasWithFilter(
-        @RequestParam searchTerm: String,
+        @RequestParam(value = "t") searchTerm: String,
     ): ResponseEntity<List<PessoaRequest>> {
         val pessoas = pessoaService.getPessoaBySearchTerm(searchTerm)
         val pessoasList = pessoas.map { pessoaMapper.toDomain(it) }
@@ -54,6 +54,6 @@ class PessoaController @Autowired constructor(
 
     @GetMapping("/contagem-pessoas")
     fun getTotalPessoas(): ResponseEntity<Int> {
-        TODO()
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.getTotalPessoas())
     }
 }
