@@ -1,11 +1,17 @@
 version: '3'
 services:
   api:
-    image: sha256:7a88941a90c35be7be1a5dad1369d400f90eaf5056fe1cf7b1d62577dcf34574
+    image: sha256:0ab1ab54cd4165b7e9a26b6ea34207850580283703abe496cc98c08f67ef8992
     ports:
       - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     deploy:
       replicas: 2
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: '1.5GB'
 
   db:
     image: postgres:latest
@@ -13,11 +19,26 @@ services:
       - POSTGRES_DB=rinhabackend
       - POSTGRES_USER=rinha
       - POSTGRES_PASSWORD=123456
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 60s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1.2GB'
 
   nginx:
     image: nginx:latest
     ports:
       - "9999:80"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '0.3GB'
     depends_on:
       - api
     volumes:

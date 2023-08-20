@@ -5,13 +5,20 @@ import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Index
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
 import java.time.LocalDate
 import java.util.UUID
 
 @Entity
-@Table(name = "tb_pessoa")
+@Table(
+    name = "tb_pessoa",
+    indexes = [
+        Index(name = "idx_pessoa_apelido", columnList = "apelido", unique = true),
+        Index(name = "idx_pessoa_nome", columnList = "nome", unique = true),
+    ],
+)
 class Pessoa(
 
     @Id
