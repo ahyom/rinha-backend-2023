@@ -21,7 +21,7 @@ class ControllerAdvice {
 
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFoundException(exception: NotFoundException): ResponseEntity<ErrorRequest> {
-        logger.error("Handling NotFoundException: ${exception.message}", exception)
+        logger.error("Handling NotFoundException: ${exception.message}")
         return ResponseEntity(
             ErrorRequest(
                 HttpStatus.NOT_FOUND.reasonPhrase,
@@ -34,7 +34,7 @@ class ControllerAdvice {
 
     @ExceptionHandler(EntityAlreadyExistsException::class)
     fun handleEntityAlreadyExistsException(exception: EntityAlreadyExistsException): ResponseEntity<ErrorRequest> {
-        logger.error("Handling Exception: ${exception.message}", exception)
+        logger.error("Handling Exception: ${exception.message}")
         return ResponseEntity(
             ErrorRequest(
                 HttpStatus.UNPROCESSABLE_ENTITY.reasonPhrase,
@@ -47,7 +47,7 @@ class ControllerAdvice {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(exception: IllegalArgumentException): ResponseEntity<ErrorRequest> {
-        logger.error("Handling Exception: ${exception.message}", exception)
+        logger.error("Handling Exception: ${exception.message}")
         return ResponseEntity(
             ErrorRequest(
                 HttpStatus.UNPROCESSABLE_ENTITY.reasonPhrase,

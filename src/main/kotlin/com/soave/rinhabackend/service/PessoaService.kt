@@ -6,6 +6,7 @@ import com.soave.rinhabackend.exception.NotFoundException
 import com.soave.rinhabackend.repository.PessoaRepository
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -32,6 +33,7 @@ class PessoaService @Autowired constructor(
         }
     }
 
+    @Cacheable("pessoasById")
     fun getPessoaById(pessoaId: String): Pessoa {
         logger.debug { "Getting pessoa with ID [$pessoaId]" }
         return pessoaRepository
@@ -39,6 +41,7 @@ class PessoaService @Autowired constructor(
             .orElseThrow { NotFoundException("Pessoa with ID [$pessoaId] not found") }
     }
 
+    @Cacheable("pessoasBySearchTerm")
     fun getPessoaBySearchTerm(searchTerm: String): List<Pessoa> {
         logger.debug { "Getting pessoa with searchTerm [$searchTerm]" }
         return pessoaRepository.findAllBySearchTerm(searchTerm)

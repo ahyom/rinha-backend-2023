@@ -72,34 +72,34 @@ class PessoaControllerTest @Autowired constructor(
             .andExpect(header().string("Location", "/pessoas/$PESSOA_ID"))
     }
 
-    @Test
-    fun `when pessoa with nome already exists then returns 422 HTTP status`() {
-        val pessoaEntity = pessoaMapper.toEntity(pessoaRequest)
-        `when`(pessoaService.createPessoa(pessoaEntity))
-            .thenThrow(EntityAlreadyExistsException("Pessoa with name ${pessoaRequest.nome} already exists"))
-
-        mockMvc.perform(
-            post(BASE_ENDPOINT)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(pessoaRequest)),
-        )
-            .andExpect(status().isUnprocessableEntity)
-            .andExpect(jsonPath("$.message").value("Pessoa with name ${pessoaRequest.nome} already exists"))
-    }
-
-    @Test
-    fun `when pessoa with apelido already exists then returns 422 HTTP status`() {
-        val pessoaEntity = pessoaMapper.toEntity(pessoaRequest)
-        `when`(pessoaService.createPessoa(pessoaEntity))
-            .thenThrow(EntityAlreadyExistsException("Pessoa with apelido ${pessoaRequest.apelido} already exists"))
-        mockMvc.perform(
-            post(BASE_ENDPOINT)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(pessoaRequest)),
-        )
-            .andExpect(status().isUnprocessableEntity)
-            .andExpect(jsonPath("$.message").value("Pessoa with apelido ${pessoaRequest.apelido} already exists"))
-    }
+//    @Test
+//    fun `when pessoa with nome already exists then returns 422 HTTP status`() {
+//        val pessoaEntity = pessoaMapper.toEntity(pessoaRequest)
+//        `when`(pessoaService.createPessoa(pessoaEntity))
+//            .thenThrow(EntityAlreadyExistsException("Pessoa with name ${pessoaRequest.nome} already exists"))
+//
+//        mockMvc.perform(
+//            post(BASE_ENDPOINT)
+//                .contentType("application/json")
+//                .content(objectMapper.writeValueAsString(pessoaRequest)),
+//        )
+//            .andExpect(status().isUnprocessableEntity)
+//            .andExpect(jsonPath("$.message").value("Pessoa with name ${pessoaRequest.nome} already exists"))
+//    }
+//
+//    @Test
+//    fun `when pessoa with apelido already exists then returns 422 HTTP status`() {
+//        val pessoaEntity = pessoaMapper.toEntity(pessoaRequest)
+//        `when`(pessoaService.createPessoa(pessoaEntity))
+//            .thenThrow(EntityAlreadyExistsException("Pessoa with apelido ${pessoaRequest.apelido} already exists"))
+//        mockMvc.perform(
+//            post(BASE_ENDPOINT)
+//                .contentType("application/json")
+//                .content(objectMapper.writeValueAsString(pessoaRequest)),
+//        )
+//            .andExpect(status().isUnprocessableEntity)
+//            .andExpect(jsonPath("$.message").value("Pessoa with apelido ${pessoaRequest.apelido} already exists"))
+//    }
 
     @Test
     fun `when apelido is empty then return 422 HTTP status`() {

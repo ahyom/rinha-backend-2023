@@ -2,11 +2,14 @@ package com.soave.rinhabackend.domain.mapper
 
 import com.soave.rinhabackend.domain.entity.Pessoa
 import com.soave.rinhabackend.domain.request.PessoaRequest
+import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Objects.isNull
 import java.util.UUID
+
+private val logger = KotlinLogging.logger {}
 
 @Component
 class PessoaMapper : Mapper<PessoaRequest, Pessoa> {
@@ -40,6 +43,11 @@ class PessoaMapper : Mapper<PessoaRequest, Pessoa> {
     }
 
     private fun dateStringToLocalDate(date: String): LocalDate {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        try {
+            return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        } catch (e: Exception) {
+            logger.error { "Data [$date] eh invalida" }
+            throw IllegalArgumentException("Data invalida")
+        }
     }
 }

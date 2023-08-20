@@ -1,5 +1,6 @@
 spring:
-  profiles: prod
+  cache:
+    type: simple
   datasource:
     url: jdbc:postgresql://db:5432/rinhabackend
     username: rinha

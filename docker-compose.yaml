@@ -1,17 +1,19 @@
 version: '3'
 services:
   api:
-    image: sha256:0ab1ab54cd4165b7e9a26b6ea34207850580283703abe496cc98c08f67ef8992
+    image: sha256:5995991de23fbcb47973f5d6e0c7c3249b6bef333e2d63754957a36ac3c98fa5
     ports:
       - "8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - rinha-network
     deploy:
       replicas: 2
-      resources:
-        limits:
-          cpus: '0.8'
-          memory: '1.5GB'
+#      resources:
+#        limits:
+#          cpus: '0.2'
+#          memory: '1.5GB'
 
   db:
     image: postgres:latest
@@ -19,6 +21,7 @@ services:
       - POSTGRES_DB=rinhabackend
       - POSTGRES_USER=rinha
       - POSTGRES_PASSWORD=123456
+    command: postgres -c synchronous_commit=off -c shared_buffers=256MB -c max_connections=100
     deploy:
       restart_policy:
         condition: on-failure
@@ -28,18 +31,29 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: '1.2GB'
+          memory: '0.7GB'
+    ports:
+      - "5432:5432"
+    networks:
+      - rinha-network
 
   nginx:
     image: nginx:latest
     ports:
       - "9999:80"
+    networks:
+      - rinha-network
     deploy:
       resources:
         limits:
-          cpus: '0.2'
-          memory: '0.3GB'
+          cpus: '0.1'
+          memory: '0.2GB'
     depends_on:
       - api
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+networks:
+    rinha-network:
+        driver: bridge
+        external: false
