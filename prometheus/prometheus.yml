@@ -1,0 +1,14 @@
+scrape_configs:
+  - job_name: 'Spring Boot Application input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['api:8080']
+        labels:
+          application: 'rinha-backend-1'
+      - targets: [ 'api2:8080' ]
+        labels:
+          application: 'rinha-backend-2'
+      - targets: ['db:5432']
+        labels:
+          application: postgres

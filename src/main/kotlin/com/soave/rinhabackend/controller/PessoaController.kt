@@ -26,7 +26,6 @@ class PessoaController @Autowired constructor(
         @RequestBody pessoaRequest: PessoaRequest,
     ): ResponseEntity<PessoaRequest> {
         val pessoa = pessoaMapper.toEntity(pessoaRequest)
-
         pessoaService.createPessoa(pessoa)
 
         return ResponseEntity

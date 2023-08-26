@@ -46,8 +46,7 @@ class PessoaMapper : Mapper<PessoaRequest, Pessoa> {
         try {
             return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         } catch (e: Exception) {
-            logger.error { "Data [$date] eh invalida" }
-            throw IllegalArgumentException("Data invalida")
+            throw IllegalArgumentException("Data [$date] eh invalida")
         }
     }
 }

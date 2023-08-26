@@ -1,8 +1,11 @@
 package com.soave.rinhabackend.domain.request
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Validation
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Past
 import jakarta.validation.constraints.Size
+import java.time.LocalDate
 import java.util.UUID
 
 class PessoaRequest(

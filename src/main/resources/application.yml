@@ -1,6 +1,4 @@
 spring:
-  cache:
-    type: simple
   datasource:
     url: jdbc:postgresql://db:5432/rinhabackend
     username: rinha
@@ -14,6 +12,21 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    redis:
+      url: redis://redis
+      port: 6379
+
+# actuator and prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+          - metrics
+    enabled-by-default: false
 logging:
   level:
     root: INFO
