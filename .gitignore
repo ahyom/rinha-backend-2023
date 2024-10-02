@@ -25,8 +25,11 @@ replay_pid*
 
 # IDEA Files
 .idea
+.idea/gradle.xml
+.idea/misc.xml
 
 # Gradle Files
 .gradle
 gradlew.bat
 build
+
