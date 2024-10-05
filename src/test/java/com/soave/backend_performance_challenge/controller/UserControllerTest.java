@@ -5,8 +5,7 @@ import com.soave.backend_performance_challenge.model.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,43 +15,45 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(UserController.class)
 public class UserControllerTest {
 
     private static final String BASE_URL = "/users";
-
-    private final MockMvc mockMvc;
-
-    private final ObjectMapper objectMapper;
-
-    private UserDto userDto;
-
     private static final String ID = "46d4d866-ec12-43fd-b513-7d5799ef05de";
 
     @Autowired
-    public UserControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
-        this.mockMvc = mockMvc;
-        this.objectMapper = objectMapper;
-    }
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+//    @MockBean
+//    private UserService userService;
+
+    private UserDto userDto;
 
     @BeforeEach
     void setup() {
-        userDto = buildDeafultUserDto();
+        userDto = buildDefaultUserDto();
+
+        // Defina o comportamento do serviço mockado
+//        when(userService.createUser(any(UserDto.class)))
+//                .thenReturn(userDto); // Simula a criação do usuário
     }
 
     @Test
     void whenAllAttributesAreCorrect_shouldReturnHttp200WithId() throws Exception {
         mockMvc.perform(
-                post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto))
+                        post(BASE_URL)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(userDto))
                 )
                 .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"));
+                .andExpect(header().exists("Location"))
+                .andExpect(header().string("Location", "/pessoas/" + ID)); // Verifica se o ID correto foi retornado no Location
     }
 
-    private UserDto buildDeafultUserDto() {
+    private UserDto buildDefaultUserDto() {
         List<String> stacks = List.of("Java", "Kotlin", "MySQL");
         return new UserDto(
                 ID,

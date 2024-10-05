@@ -17,8 +17,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
-        URI location = URI.create("/pessoas/" + UUID.randomUUID());
-
+        URI location = URI.create("/pessoas/" + userDto.id());
         return ResponseEntity.created(location).body(userDto);
     }
 }
