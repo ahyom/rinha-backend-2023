@@ -34,3 +34,5 @@ gradlew.bat
 build
 out
 
+.DS_Store
+
