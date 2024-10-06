@@ -29,15 +29,20 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         var userMapped = userMapper.toEntity(userDto);
 
-        userService.createUser(userMapped);
+        User userCreated = userService.createUser(userMapped);
 
-        URI location = URI.create("/pessoas/" + userMapped.getId());
-        return ResponseEntity.created(location).body(userDto);
+        URI location = URI.create("/pessoas/" + userCreated.getId());
+        return ResponseEntity.created(location).body(userMapper.toDto(userCreated));
     }
 
     @GetMapping("/{user-id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("user-id") String userId) {
         User foundedUser = userService.getUserById(userId);
         return ResponseEntity.ok(userMapper.toDto(foundedUser));
+    }
+
+    @GetMapping("/contagem-pessoas")
+    public ResponseEntity<Long> getCountPessoas() {
+        return ResponseEntity.ok(userService.getCountPessoas());
     }
 }

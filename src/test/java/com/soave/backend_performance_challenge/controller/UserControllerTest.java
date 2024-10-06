@@ -2,6 +2,7 @@ package com.soave.backend_performance_challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soave.backend_performance_challenge.controller.advice.ControllerErrorHandler;
+import com.soave.backend_performance_challenge.model.exception.UserNotFoundException;
 import com.soave.backend_performance_challenge.service.UserService;
 import com.soave.backend_performance_challenge.model.domain.User;
 import com.soave.backend_performance_challenge.model.dto.UserDto;
@@ -23,6 +24,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +65,8 @@ public class UserControllerTest {
 
     @Test
     void whenAllAttributesAreCorrect_shouldReturnHttp200WithId() throws Exception {
+        when(userService.createUser(any())).thenReturn(user);
+
         mockMvc.perform(
                 post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -76,7 +80,7 @@ public class UserControllerTest {
 
         verify(userService).createUser(user);
         verify(userMapper).toEntity(userDto);
-        verify(userMapper, never()).toDto(user);
+        verify(userMapper).toDto(user);
     }
 
     @ParameterizedTest
@@ -105,9 +109,10 @@ public class UserControllerTest {
                 .andExpect(status().isUnprocessableEntity());
     }
 
-    @Test
-    void whenNomeIsNotInformed_shouldReturnHttp422() throws Exception {
-        userDto = new UserDto(null, "sikamikaniko", null, "1993-08-23", List.of("Java", "Kotlin", "MySQL"));
+    @ParameterizedTest
+    @NullAndEmptySource
+    void whenNomeIsNotInformed_shouldReturnHttp422(final String name) throws Exception {
+        userDto = new UserDto(null, "sikamikaniko", name, "1993-08-23", List.of("Java", "Kotlin", "MySQL"));
 
         mockMvc.perform(
                         post(BASE_URL)
@@ -152,6 +157,15 @@ public class UserControllerTest {
                                 .content(objectMapper.writeValueAsString(userDto))
                 )
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void whenUserWasNotFound_shouldReturnHttp404() throws Exception {
+        when(userService.getUserById(ID)).thenThrow(new UserNotFoundException("User not found"));
+
+        mockMvc.perform(
+                get(BASE_URL + "/" + ID)
+        ).andExpect(status().isNotFound());
     }
 
     private UserDto buildDefaultUserDto() {
