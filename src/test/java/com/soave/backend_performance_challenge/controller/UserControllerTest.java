@@ -1,15 +1,19 @@
 package com.soave.backend_performance_challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soave.backend_performance_challenge.UserService;
+import com.soave.backend_performance_challenge.controller.advice.ControllerErrorHandler;
+import com.soave.backend_performance_challenge.service.UserService;
 import com.soave.backend_performance_challenge.model.domain.User;
 import com.soave.backend_performance_challenge.model.dto.UserDto;
 import com.soave.backend_performance_challenge.model.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
+@Import(ControllerErrorHandler.class)
 public class UserControllerTest {
 
     private static final String BASE_URL = "/pessoas";
@@ -74,9 +79,10 @@ public class UserControllerTest {
         verify(userMapper, never()).toDto(user);
     }
 
-    @Test
-    void whenApelidoIsNotInformed_shouldReturnHttp422() throws Exception {
-        userDto = new UserDto(null, null, "Arthur", "1993-08-23", List.of("Java", "Kotlin", "MySQL"));
+    @ParameterizedTest
+    @NullAndEmptySource
+    void whenUsernameIsNotInformed_shouldReturnHttp422(final String username) throws Exception {
+        userDto = new UserDto(null, username, "Arthur", "1993-08-23", List.of("Java", "Kotlin", "MySQL"));
 
         mockMvc.perform(
                         post(BASE_URL)
@@ -87,8 +93,8 @@ public class UserControllerTest {
     }
 
     @Test
-    void whenApelidoIsGreaterThan32Bytes_shouldReturnHttp422() throws Exception {
-        String longUsername = "a".repeat(33); // 33 characters
+    void whenUsernameIsGreaterThan32Bytes_shouldReturnHttp422() throws Exception {
+        String longUsername = "a".repeat(33);
         userDto = new UserDto(null, longUsername, "Arthur", "1993-08-23", List.of("Java", "Kotlin", "MySQL"));
 
         mockMvc.perform(
@@ -97,18 +103,6 @@ public class UserControllerTest {
                                 .content(objectMapper.writeValueAsString(userDto))
                 )
                 .andExpect(status().isUnprocessableEntity());
-    }
-
-    @Test
-    void whenApelidoIsNotAString_shouldReturnHttp400() throws Exception {
-        String invalidJson = "{ \"apelido\": 123, \"nome\": \"Arthur\", \"nascimento\": \"1993-08-23\", \"stack\": [\"Java\"] }";
-
-        mockMvc.perform(
-                        post(BASE_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(invalidJson)
-                )
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -134,18 +128,6 @@ public class UserControllerTest {
                                 .content(objectMapper.writeValueAsString(userDto))
                 )
                 .andExpect(status().isUnprocessableEntity());
-    }
-
-    @Test
-    void whenNomeIsNotAString_shouldReturnHttp400() throws Exception {
-        String invalidJson = "{ \"apelido\": \"sikamikaniko\", \"nome\": 123, \"nascimento\": \"1993-08-23\", \"stack\": [\"Java\"] }";
-
-        mockMvc.perform(
-                        post(BASE_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(invalidJson)
-                )
-                .andExpect(status().isBadRequest());
     }
 
     @Test

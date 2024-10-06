@@ -1,4 +1,4 @@
-package com.soave.backend_performance_challenge;
+package com.soave.backend_performance_challenge.service;
 
 import com.soave.backend_performance_challenge.model.entity.UserEntity;
 import com.soave.backend_performance_challenge.model.domain.User;

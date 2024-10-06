@@ -1,6 +1,6 @@
 package com.soave.backend_performance_challenge.controller;
 
-import com.soave.backend_performance_challenge.UserService;
+import com.soave.backend_performance_challenge.service.UserService;
 import com.soave.backend_performance_challenge.model.domain.User;
 import com.soave.backend_performance_challenge.model.dto.UserDto;
 import com.soave.backend_performance_challenge.model.mapper.UserMapper;
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         var userMapped = userMapper.toEntity(userDto);
 
         userService.createUser(userMapped);
