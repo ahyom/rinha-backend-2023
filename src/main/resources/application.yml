@@ -8,11 +8,6 @@ spring:
       idle-timeout: 10000
       connection-timeout: 30000
       max-lifetime: 1800000
-logging:
-  level:
-    org.hibernate.SQL: ERROR
-    org.hibernate.type.descriptor.sql.BasicBinder: ERROR
-    com.soave.backend_performance_challenge: DEBUG
 
 ---
 spring:
@@ -32,9 +27,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
   sql:
     init:
       mode: always
@@ -42,6 +34,12 @@ spring:
   h2:
     console:
       enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: ERROR
+    com.soave.backend_performance_challenge: DEBUG
 
 ---
 spring:
@@ -61,9 +59,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
   sql:
     init:
       mode: always
+
+logging:
+  level:
+    root: ERROR
+    org.hibernate.SQL: OFF
+    org.hibernate.type.descriptor.sql.BasicBinder: OFF

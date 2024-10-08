@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   api1:
-    image: sha256:f0203eb4b416709dff310c1d48bc166fbb246b98aaa284680c06e28c49a0ae94
+    image: sha256:981c48e2b0ef518fd0de4288246016b76ed2f14cf78621dc996682bebb089698
     hostname: api1
     ports:
       - "8080:8080"

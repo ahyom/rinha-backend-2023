@@ -2,10 +2,13 @@ package com.soave.backend_performance_challenge.service;
 
 import com.soave.backend_performance_challenge.model.entity.UserEntity;
 import com.soave.backend_performance_challenge.model.domain.User;
+import com.soave.backend_performance_challenge.model.exception.GenericErrorException;
+import com.soave.backend_performance_challenge.model.exception.UserAlreadyExistsException;
 import com.soave.backend_performance_challenge.model.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +27,13 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        log.debug("Creating user with id [{}]", user.getId());
+        log.debug("Creating user with id [{}] and username [{}]", user.getId(), user.getUsername());
         try {
             return userEntity.save(user);
-        } catch (Exception e) {
-            log.error("Error creating user with id [{}]", user.getId(), e);
-            throw new RuntimeException();
+        } catch (DataIntegrityViolationException ex) {
+            throw new UserAlreadyExistsException(ex.getMessage());
+        } catch (Exception ex) {
+            throw new GenericErrorException(ex.getMessage(), ex.getCause());
         }
     }
 
