@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,6 +37,13 @@ public class UserService {
         log.debug("Retrieving user with id [{}]", userId);
         return userEntity.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new UserNotFoundException("User with id: " + userId + " was not found"));
+    }
+
+    public List<User> getUserBySearchTerm(String searchTerm) {
+        log.debug("Retrieving users with search term [{}]", searchTerm);
+        List<User> foundedUsers = userEntity.findByStackContaining(searchTerm);
+        log.debug("Found {} users", foundedUsers.size());
+        return foundedUsers;
     }
 
     public long getCountPessoas() {

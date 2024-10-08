@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -33,6 +34,12 @@ public class UserController {
 
         URI location = URI.create("/pessoas/" + userCreated.getId());
         return ResponseEntity.created(location).body(userMapper.toDto(userCreated));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getUsersWithParameters(
+            @RequestParam("t") final String searchTerm) {
+        return ResponseEntity.ok(userMapper.toDTOList(userService.getUserBySearchTerm(searchTerm)));
     }
 
     @GetMapping("/{user-id}")
